@@ -1,4 +1,4 @@
-pip install earthengine-api
+earthengine-api
 folium
 streamlit-foluim
 plotly

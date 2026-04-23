@@ -1,5 +1,5 @@
 earthengine-api
 folium
-streamlit-foluim
+streamlit-folium
 plotly
 pandas

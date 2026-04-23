@@ -1,4 +1,3 @@
-python
 import ee
 
 def run_analysis(roi_coords):

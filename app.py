@@ -6,16 +6,39 @@ from streamlit_folium import st_folium
 
 st.set_page_config(page_title="Classification LULC Nouakchott", layout="wide")
 
-try:
-    ee.Initialize(project='non-commercial-471612')
-except:
+# --- Initialisation GEE ---
+initialized = False
+
+# Methode 1 : credentials locales
+if not initialized:
     try:
-        creds_dict = dict(st.secrets["gee_credentials"])
-        creds = ee.ServiceAccountCredentials(creds_dict["client_email"], key_data=json.dumps(creds_dict))
-        ee.Initialize(creds, project='non-commercial-471612')
-    except:
-        ee.Authenticate()
         ee.Initialize(project='non-commercial-471612')
+        initialized = True
+    except:
+        pass
+
+# Methode 2 : Service Account depuis Secrets
+if not initialized:
+    try:
+        creds_info = {
+            "type": st.secrets["gee_credentials"]["type"],
+            "project_id": st.secrets["gee_credentials"]["project_id"],
+            "private_key_id": st.secrets["gee_credentials"]["private_key_id"],
+            "private_key": st.secrets["gee_credentials"]["private_key"],
+            "client_email": st.secrets["gee_credentials"]["client_email"],
+            "client_id": st.secrets["gee_credentials"]["client_id"],
+            "auth_uri": st.secrets["gee_credentials"]["auth_uri"],
+            "token_uri": st.secrets["gee_credentials"]["token_uri"],
+        }
+        creds = ee.ServiceAccountCredentials(
+            creds_info["client_email"],
+            key_data=json.dumps(creds_info)
+        )
+        ee.Initialize(creds, project='non-commercial-471612')
+        initialized = True
+    except Exception as e:
+        st.error(f"Erreur : {e}")
+        st.stop()
 
 def run_analysis(roi_coords):
     roi = ee.Geometry.Rectangle(roi_coords)

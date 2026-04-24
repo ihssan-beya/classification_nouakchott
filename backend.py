@@ -1,7 +1,7 @@
 import ee
 
 def run_analysis(roi_coords):
-    roi = ee.Geometry.Rectangle(roi_coords)
+    roi = ee.Geometry.Rectangle(roi_coords)m
     collection = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED') \
         .filterBounds(roi) \
         .filterDate('2023-01-01', '2023-12-31') \

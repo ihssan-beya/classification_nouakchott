@@ -17,9 +17,9 @@ if not initialized:
 
 if not initialized:
     try:
-        ck = st.secrets["gee"]["CREDENTIALS"]
-        creds_dict = json.loads(ck)
-        creds = ee.ServiceAccountCredentials(creds_dict["client_email"], key_data=ck)
+        creds_dict = dict(st.secrets["gee_credentials"])
+        key_data = json.dumps(creds_dict)
+        creds = ee.ServiceAccountCredentials(creds_dict["client_email"], key_data=key_data)
         ee.Initialize(creds, project='non-commercial-471612')
         initialized = True
     except Exception as e:
